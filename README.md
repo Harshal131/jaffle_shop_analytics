@@ -1,21 +1,21 @@
 # Jaffle Shop Analytics
 
-A local **dbt Core + DuckDB** analytics project built for learning modern analytics engineering workflows using the Jaffle Shop sample dataset.[1][2]
+A local dbt Core + DuckDB analytics project built to practice modern analytics engineering workflows using the Jaffle Shop sample dataset.
 
 ## Project goal
 
-This project is designed to practice the full dbt workflow locally before moving to a cloud warehouse like Snowflake. It covers seeded raw data, staging models, marts, tests, and documentation in a version-controlled project structure.[1][3][4]
+This project is designed to practice the full dbt workflow locally before moving to a cloud warehouse like Snowflake. It includes seeded raw data, staging models, marts, tests, snapshots, and documentation in a version-controlled project structure.
 
 ## Tech stack
 
 - dbt Core
 - DuckDB
 - CSV seeds
-- Git/GitHub
+- Git / GitHub
 
-DuckDB is a good local starting point because dbt supports it as a local data platform and it can persist data in a local `.duckdb` file.[1][3]
+DuckDB is a good local starting point because it works well with dbt and persists data in a local `.duckdb` file.
 
-## Current project structure
+## Project structure
 
 ```text
 jaffle_shop_analytics/
@@ -33,41 +33,45 @@ jaffle_shop_analytics/
 └── .gitignore
 ```
 
-This layered structure follows common dbt project organization, where staging handles cleanup, intermediate handles transformation steps, and marts expose business-facing models.[4][5][6]
+This layered structure follows common dbt organization: staging cleans and standardizes data, intermediate models handle transformation logic, and marts expose business-facing outputs.
 
 ## Dataset
 
-This project uses the Jaffle Shop sample dataset, which is commonly used to learn dbt and includes seed-style CSV data for entities such as customers and orders.[2][7][8]
+This project uses the Jaffle Shop sample dataset, which is commonly used to learn dbt and includes seed-style CSV data for entities such as customers and orders.
 
-Current local seed files:
+Current seed files:
 - `raw_customers.csv`
 - `raw_orders.csv`
 
-## Models built
+## Models
 
 ### Staging
 
-- `stg_customers`: renames raw customer fields into clearer analytics-friendly names.[9][10]
-- `stg_orders`: renames raw order fields and standardizes keys for downstream joins.[9][10]
+- `stg_customers`: renames raw customer fields into cleaner analytics-friendly names.
+- `stg_orders`: renames raw order fields and standardizes keys for downstream joins.
 
 ### Mart
 
-- `customers_orders`: combines customers and orders into a business-facing mart for simple customer-order analysis.[6][11]
+- `customers_orders`: combines customers and orders into a business-facing mart for customer-order analysis.
 
-## Tests implemented
+## Snapshot
+
+A dbt snapshot is used to track changes in the orders data over time. This allows the project to preserve history instead of only storing the latest value.
+
+## Tests
 
 This project includes both generic and singular dbt tests.
 
 Generic tests currently cover:
-- `not_null` on customer and order identifiers.[12][13]
-- `unique` on `stg_orders.order_id`.[12][13]
-- `relationships` between `customers_orders.customer_id` and `stg_customers.customer_id`.[12][14]
+- `not_null` on customer and order identifiers.
+- `unique` on `stg_orders.order_id`.
+- `relationships` between `customers_orders.customer_id` and `stg_customers.customer_id`.
 
-A singular test is also used for a simple data quality sanity check, which follows dbt’s pattern that a singular test should return only failing rows.[13][15]
+A singular test is also used for a simple data quality sanity check. Singular tests should return only failing rows.
 
 ## Sources and documentation
 
-The project documents raw input data using `sources:` definitions and adds model and column descriptions in YAML files. This makes lineage clearer and helps future collaborators understand where data comes from and what each field means.[16][17]
+The project documents raw input data using `sources:` definitions and adds model and column descriptions in YAML files. This makes lineage clearer and helps future contributors understand where data comes from and what each field means.
 
 ## How to run locally
 
@@ -89,7 +93,7 @@ dbt --version
 
 ### 3. Configure the dbt profile
 
-Set the DuckDB connection in `profiles.yml` under the local `.dbt` folder. In dbt, connection details such as `target`, `outputs`, `type`, and `path` belong in `profiles.yml`, not in `dbt_project.yml`.[18][1]
+Set the DuckDB connection in `profiles.yml` under the local `.dbt` folder.
 
 Example:
 
@@ -99,8 +103,8 @@ jaffle_shop_analytics:
   outputs:
     dev:
       type: duckdb
-      path: 'jaffle_shop.duckdb'
-      threads: 4
+      path: 'C:/Users/vakha/.dbt/dev.duckdb'
+      threads: 1
 ```
 
 ### 4. Load seed data
@@ -109,35 +113,40 @@ jaffle_shop_analytics:
 dbt seed
 ```
 
-`dbt seed` loads static CSV files from the project’s seed paths into the target warehouse as tables.[19][20]
-
 ### 5. Build models
 
 ```bash
 dbt run
 ```
 
-### 6. Run tests
+### 6. Run snapshots
+
+```bash
+dbt snapshot
+```
+
+### 7. Run tests
 
 ```bash
 dbt test
 ```
 
-### 7. Generate docs
+### 8. Generate docs
 
 ```bash
 dbt docs generate
 dbt docs serve
 ```
 
-## Learning outcomes
+## What’s implemented
 
-This project is intended to build practical skill in:
-- local dbt development,
-- layered modeling with staging and marts,
-- source documentation,
-- generic and singular tests,
-- Git-based analytics engineering workflow.[3][4][16]
+- Local dbt Core + DuckDB setup
+- Seeded source data
+- Staging models
+- Business-facing mart model
+- Snapshot history tracking
+- Generic and singular tests
+- Source and model documentation
 
 ## Next improvements
 
@@ -145,4 +154,4 @@ Planned next steps include:
 - adding intermediate models,
 - creating more realistic mart patterns such as `dim_customers` and `fct_orders`,
 - expanding tests,
-- and later adapting the same dbt structure to Snowflake.[5][21][22]
+- and later adapting the same dbt structure to Snowflake.
