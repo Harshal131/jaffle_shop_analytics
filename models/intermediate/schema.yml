@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: int_customer_orders
+    description: "Intermediate model that joins staged customer and order data before the final mart layer."
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer."
+      - name: first_name
+        description: "Customer first name."
+      - name: last_name
+        description: "Customer last name."
+      - name: order_id
+        description: "Unique identifier for the order."
+      - name: order_date
+        description: "Date the order was placed."
+      - name: status
+        description: "Order status from the staged orders model."

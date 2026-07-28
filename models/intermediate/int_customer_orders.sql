@@ -1,4 +1,3 @@
-{{ config(materialized='table') }}
 with customers as (
     select
         *
@@ -9,7 +8,7 @@ orders as (
         *
     from {{ ref('stg_orders') }}
 ),
-customer_orders as (
+joined as (
     select
         c.customer_id,
         c.first_name,
@@ -21,4 +20,4 @@ customer_orders as (
     left join orders o
     on c.customer_id = o.customer_id
 )
-select * from customer_orders
+select * from joined
