@@ -33,3 +33,23 @@ models:
         description: "Date the order was placed."
       - name: status
         description: "Lifecycle status of the order."
+
+  - name: fact_orders_current
+    description: "Fact table containing one row per order, filtered to only include the most recent version of each order."
+    columns:
+      - name: order_id
+        description: "Primary key for the order."
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Foreign key to the customer dimension."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: order_date
+        description: "Date the order was placed."
+      - name: status
+        description: "Lifecycle status of the order."
