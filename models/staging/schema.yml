@@ -1,0 +1,55 @@
+version: 2
+
+sources:
+  - name: jaffle_src
+    description: "Raw seed-backed source data for the local Jaffle Shop project."
+    tables:
+      - name: raw_customers
+        description: "Raw customer records loaded from CSV seed data."
+        columns:
+          - name: id
+            description: "Raw customer identifier from the source data."
+          - name: first_name
+            description: "Customer first name from the raw source."
+          - name: last_name
+            description: "Customer last name from the raw source."
+
+      - name: raw_orders
+        description: "Raw order records loaded from CSV seed data."
+        columns:
+          - name: id
+            description: "Raw order identifier from the source data."
+          - name: user_id
+            description: "Raw customer reference from the source data."
+          - name: order_date
+            description: "Date the order was placed."
+          - name: status
+            description: "Order lifecycle status in the raw source."
+
+models:
+  - name: stg_customers
+    description: "Cleans and renames raw customer data for downstream analytics use."
+    columns:
+      - name: customer_id
+        description: "Primary key for customers after renaming raw id."
+        data_tests:
+          - not_null
+      - name: first_name
+        description: "Customer first name."
+      - name: last_name
+        description: "Customer last name."
+
+  - name: stg_orders
+    description: "Cleans and renames raw order data for downstream analytics use."
+    columns:
+      - name: order_id
+        description: "Primary key for orders after renaming raw id."
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Foreign key to the customer who placed the order."
+      - name: order_date
+        description: "Date the order was placed."
+      - name: status
+        description: "Standardized order status from the raw source."
