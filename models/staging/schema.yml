@@ -2,6 +2,7 @@ version: 2
 
 sources:
   - name: jaffle_src
+    schema: main
     description: "Raw seed-backed source data for the local Jaffle Shop project."
     tables:
       - name: raw_customers
